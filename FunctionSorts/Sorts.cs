@@ -11,17 +11,30 @@ namespace FunctionSorts
     {
         private int[] arrayInt;
         private int counter;
-        private Tuple <string, double>[] timeOfSorts;
+        private Tuple <string, TimeSpan>[] timeOfSorts;
         private int counterTime;
-        
+        private int max;
         
         public Sorts(int lenghtA)
         {
             arrayInt = new int[lenghtA];
-            timeOfSorts = new Tuple<string, double>[20];
-            
+            timeOfSorts = new Tuple<string, TimeSpan>[20];
+            max = lenghtA;
             counter = 0;
             counterTime = 0;
+        }
+        public Sorts(Sorts Aux)
+        {
+            
+            this.arrayInt = new int[Aux.counter];
+            this.counter = 0;
+            for (int i = 0; i < Aux.counter; i++)
+                this.arrayInt[this.counter++] = Aux.arrayInt[i];
+
+        }
+        public bool IsEmpty()
+        {
+            return counter == 0;
         }
         public void InsertNumbersA(int size)
         {
@@ -32,6 +45,7 @@ namespace FunctionSorts
                 Random numbers = new Random();
                 int number = numbers.Next(0, size);
                 arrayInt[counter++] = number;
+                
             }
 
         }
@@ -54,9 +68,9 @@ namespace FunctionSorts
                 Console.WriteLine(timeOfSorts[i].Item2);
             }
         }
-        public void timeOfSort(string name, double time)
+        public void timeOfSort(string name, TimeSpan time)
         {
-            Tuple<string, double> addTime = new Tuple<string, double>(name, time);
+            Tuple<string, TimeSpan> addTime = new Tuple<string, TimeSpan>(name, time);
             timeOfSorts[counterTime++] = addTime;
         }
         public void printTimeOfSorts()
@@ -77,7 +91,7 @@ namespace FunctionSorts
             Console.WriteLine("El menor tiempo es: ");
             Console.WriteLine("name: " + timeOfSorts[menor].Item1 + ". Time: " + timeOfSorts[menor].Item2);
         }
-        public void SortBurble(int [] Element)
+        public void SortBurble(Sorts Aux)
         {
             
 
@@ -85,16 +99,16 @@ namespace FunctionSorts
             Console.WriteLine("-----------------------------------------------");
             Console.WriteLine();
             bool stopIsSort = false;
-            for (int i = 0; i < counter; i++)
+            for (int i = 0; i < Aux.counter; i++)
             {
                 stopIsSort = false;
-                for (int j = 0; j < counter - (i + 1); j++)
+                for (int j = 0; j < Aux.counter - (i + 1); j++)
                 {
-                    if (Element[j] > Element[j + 1])
+                    if (Aux.arrayInt[j] > Aux.arrayInt[j + 1])
                     {
-                        int aux = Element[j + 1];
-                        Element[j + 1] = Element[j];
-                        Element[j] = aux;
+                        int temp = Aux.arrayInt[j + 1];
+                        Aux.arrayInt[j + 1] = Aux.arrayInt[j];
+                        Aux.arrayInt[j] = temp;
                         stopIsSort = true;
                     }
                 }
@@ -108,19 +122,19 @@ namespace FunctionSorts
           
         }
 
-        public void SortInsercion(int [] Element)
+        public void SortInsercion(Sorts Aux)
         {
             
 
-            for (int i = 1; i < counter; i++)
+            for (int i = 1; i < Aux.counter; i++)
             {
-                int clave = Element[i];
+                int clave = Aux.arrayInt[i];
                 for (int j = i - 1; j >= 0; j--)
                 {
-                    if (Element[j] > clave)
+                    if (Aux.arrayInt[j] > clave)
                     {
-                        Element[j + 1] = Element[j];
-                        Element[j] = clave;
+                        Aux.arrayInt[j + 1] = Aux.arrayInt[j];
+                        Aux.arrayInt[j] = clave;
                     }
 
                 }
@@ -130,21 +144,21 @@ namespace FunctionSorts
             
         }
 
-        public void SortSeleccion(int [] Element)
+        public void SortSeleccion(Sorts Aux)
         {
             
 
             Console.WriteLine();
             Console.WriteLine("-----------------------------------------------");
             
-            for (int i = 0; i < counter - 1; i++)
+            for (int i = 0; i < Aux.counter - 1; i++)
             {
                 
                 int menor = i;
-                for (int j = i + 1; j < counter; j++)
+                for (int j = i + 1; j < Aux.counter; j++)
                 {
                     // int lessNumber = Element[j - 1];
-                    if (Element[menor] > Element[j])
+                    if (Aux.arrayInt[menor] > Aux.arrayInt[j])
                     {
                         
                         menor = j;
@@ -152,12 +166,18 @@ namespace FunctionSorts
                     }
                 }
                 
-                int aux = Element[i];
-                Element[i] = Element[menor];
-                Element[menor] = aux;
+                int temp = Aux.arrayInt[i];
+                Aux.arrayInt[i] = Aux.arrayInt[menor];
+                Aux.arrayInt[menor] = temp;
             }
 
             
+        }
+
+        public void printArray(Sorts Aux)
+        {
+            for (int i = 0; i < Aux.counter; i++)
+                Console.Write(Aux.arrayInt[i] + " ");
         }
 
         public void Menu()
@@ -175,10 +195,10 @@ namespace FunctionSorts
                     Console.WriteLine("3. Sort Inserción");
                     Console.WriteLine("4. Sort Selección");
                     Console.WriteLine("5. Show the array");
-                Console.WriteLine("6. See time of Sort in each sort");
+                    Console.WriteLine("6. See time of Sort in each sort");
                     Console.WriteLine("7. Exit");
                     Console.WriteLine("-----------------------------------------");
-                    Console.WriteLine("Choose one of the options: ");
+                    Console.Write("Choose one of the options: ");
                 try
                 {
                     option = int.Parse(Console.ReadLine());
@@ -190,76 +210,93 @@ namespace FunctionSorts
                 
                     switch (option)
                     {
-                        case 1:
-                            int n;
-                            Console.WriteLine("How many numbers do you want?: ");
+                     case 1:
+                        int n;
+                        Console.Write("How many numbers do you want?: ");
+                        try
+                        {
                             n = int.Parse(Console.ReadLine());
                             InsertNumbersA(n);
-                            break;
+
+                        }
+                        catch(Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                        break;
                     case 2:
-                        int[] Element = new int[counter];
-                        Stopwatch T1 = new Stopwatch();
-                        
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                        {
+                            Sorts Distribucion1 = new Sorts(this);
+                            Stopwatch T1 = new Stopwatch();
 
-                        for (int i = 0; i < counter; i++)
-                            Element[i] = arrayInt[i];
+                            printArray(Distribucion1);
 
-                        for (int i = 0; i < counter; i++)
-                            Console.Write(Element[i] + " ");
-                        T1.Start();
-                        SortBurble(Element);
-                        T1.Stop();
-                        
-                        timeOfSort("Burble", T1.ElapsedTicks);
-                        for (int i = 0; i < Element.Length; i++)
-                            Console.Write(Element[i] + " ");
+                            T1.Start();
+                            SortBurble(Distribucion1);
+                            T1.Stop();
+
+                            timeOfSort("Burble", T1.Elapsed);
+                            printArray(Distribucion1);
+                        }
                         break;
                     case 3:
-                        int[] Element2 = new int[counter];
-                        Stopwatch T2 = new Stopwatch();
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                        {
+                            Sorts Distribucion2 = new Sorts(this);
+                            Stopwatch T2 = new Stopwatch();
 
-                        for (int i = 0; i < counter; i++)
-                            Element2[i] = arrayInt[i];
+                            printArray(Distribucion2);
 
-                        for (int i = 0; i < counter; i++)
-                            Console.Write(Element2[i] + " ");
+                            T2.Start();
+                            SortInsercion(Distribucion2);
+                            T2.Stop();
 
-                        T2.Start();
-                        SortInsercion(Element2);
-                        T2.Stop();
-                        timeOfSort("Inserción", T2.ElapsedTicks);
-                        for (int i = 0; i < Element2.Length; i++)
-                            Console.Write(Element2[i] + " ");
+                            timeOfSort("Inserción", T2.Elapsed);
+                            printArray(Distribucion2);
+                        } 
                         break;
                     case 4:
-                        int[] Element3 = new int[counter];
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                        {
+                            Sorts Distribucion3 = new Sorts(this);
+                            Stopwatch T3 = new Stopwatch();
 
-                        Stopwatch T3 = new Stopwatch();
+                            printArray(Distribucion3);
 
-                        for (int i = 0; i < counter; i++)
-                            Element3[i] = arrayInt[i];
+                            T3.Start();
+                            SortSeleccion(Distribucion3);
+                            T3.Stop();
 
-                        for (int i = 0; i < counter; i++)
-                            Console.Write(Element3[i] + " ");
-
-                        T3.Start();
-                        SortSeleccion(Element3);
-                        T3.Stop();
-
-                        timeOfSort("Selección", T3.ElapsedTicks);
-
-                        for (int i = 0; i < Element3.Length; i++)
-                            Console.Write(Element3[i] + " ");
+                            timeOfSort("Selección", T3.Elapsed);
+                            printArray(Distribucion3);
+                        }
                         break;
                         case 5:
+                        Console.WriteLine("---------------------------------");
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
                             PrintArray();
                             break;
                     case 6:
-                        printTimeOfSorts();
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                            printTimeOfSorts();
                         break;
                         case 7:
                             Console.WriteLine("See you");
                             break;
+                    default:
+                        Console.WriteLine("That option not exist");
+                        break;
                     }
             } while (option != 7);
             
