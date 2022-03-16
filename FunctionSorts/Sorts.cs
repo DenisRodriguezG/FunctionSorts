@@ -174,12 +174,115 @@ namespace FunctionSorts
             
         }
 
+        // Sorts a (portion of an) array, divides it into partitions, then sorts those
+        public void QuickSort(Sorts A, int lo, int hi)
+        {
+            int p = 0;
+
+            //Ensure indices are in correct order
+            if (lo >= hi || lo < 0)
+                return;
+
+            //Partition array and get the pivot index
+            p = Partition(A, lo, hi);
+
+            //Sort the two partitions
+            QuickSort(A, lo, p - 1);
+            QuickSort(A, p + 1, hi);
+        }
+
+        public int Partition(Sorts A, int lo, int hi)
+        {
+            int pivot = 0, i = 0;
+            pivot = A.arrayInt[hi];//Choose the last element as the pivot
+
+            //Tempory pivot index
+            i = lo - 1;
+            
+            for (int j = lo; j < (hi - 1); j++)
+            {
+                int Aux;
+                //If the current element is less than or equal to the pivot
+                if (A.arrayInt[j] <= pivot)
+                {
+                    i = i + 1;
+                    //Swap the current element with the element at the temporary pivot index
+                    Aux = A.arrayInt[i];
+                    A.arrayInt[i] = A.arrayInt[j];
+                    A.arrayInt[j] = Aux;
+
+                }
+                
+
+
+            }
+            //move the pivot element to the correct pivot position (between the smaller and larger elements
+            i = i + 1;
+            int Aux2;
+            Aux2 = A.arrayInt[i];
+            A.arrayInt[i] = A.arrayInt[hi];
+            A.arrayInt[hi] = Aux2;
+            return i;
+
+        }
+
         public void printArray(Sorts Aux)
         {
             for (int i = 0; i < Aux.counter; i++)
                 Console.Write(Aux.arrayInt[i] + " ");
         }
+        public void AllSorts()
+        {
+            Stopwatch Times = new Stopwatch();
+            Sorts Distribucion1 = new Sorts(this);
+            Sorts Distribucion2 = new Sorts(this);
+            Sorts Distribucion3 = new Sorts(this);
+            Sorts Distribucion4 = new Sorts(this);
+            Sorts Distribucion5 = new Sorts(this);
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("       Sort Burble");
+            Console.WriteLine("------------------------------------");
 
+            printArray(Distribucion1);
+
+            Times.Start();
+            SortBurble(Distribucion1);
+            Times.Stop();
+
+            timeOfSort("Burble", Times.Elapsed);
+            printArray(Distribucion1);
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("       Sort insercion");
+            Console.WriteLine("------------------------------------");
+
+            printArray(Distribucion2);
+
+            Times.Start();
+            SortInsercion(Distribucion2);
+            Times.Stop();
+
+            timeOfSort("Inserción", Times.Elapsed);
+            printArray(Distribucion2);
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("       Sort selección");
+            Console.WriteLine("------------------------------------");
+
+            printArray(Distribucion3);
+
+            Times.Start();
+            SortBurble(Distribucion3);
+            Times.Stop();
+
+            timeOfSort("Selección", Times.Elapsed);
+            printArray(Distribucion3);
+
+            Console.WriteLine();
+            Console.WriteLine();
+            printTimeOfSorts();
+
+        }
         public void Menu()
         {
                 int option = 0;
@@ -194,9 +297,11 @@ namespace FunctionSorts
                     Console.WriteLine("2. Sort Burble");
                     Console.WriteLine("3. Sort Inserción");
                     Console.WriteLine("4. Sort Selección");
-                    Console.WriteLine("5. Show the array");
-                    Console.WriteLine("6. See time of Sort in each sort");
-                    Console.WriteLine("7. Exit");
+                    Console.WriteLine("5. QuickSort");
+                    Console.WriteLine("6. Show the array");
+                    Console.WriteLine("7. See time of Sort in each sort");
+                    Console.WriteLine("8. All Sorts");
+                    Console.WriteLine("9. Exit");
                     Console.WriteLine("-----------------------------------------");
                     Console.Write("Choose one of the options: ");
                 try
@@ -278,27 +383,48 @@ namespace FunctionSorts
                             printArray(Distribucion3);
                         }
                         break;
-                        case 5:
+                    case 5:
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                        {
+                            Sorts Distribucion4 = new Sorts(this);
+                            Stopwatch T4 = new Stopwatch();
+
+                            printArray(Distribucion4);
+
+                            T4.Start();
+                            QuickSort(Distribucion4, 0, Distribucion4.arrayInt.Length-1);
+                            T4.Stop();
+                            Console.WriteLine();
+                            timeOfSort("QuickSort", T4.Elapsed);
+                            printArray(Distribucion4);
+                        }
+                        break;
+                    case 6:
                         Console.WriteLine("---------------------------------");
                         if (IsEmpty())
                             Console.WriteLine("The array is empty");
                         else
                             PrintArray();
                             break;
-                    case 6:
+                    case 7:
                         if (IsEmpty())
                             Console.WriteLine("The array is empty");
                         else
                             printTimeOfSorts();
                         break;
-                        case 7:
-                            Console.WriteLine("See you");
-                            break;
+                    case 8:
+                        AllSorts();
+                        break;
+                    case 9:
+                        Console.WriteLine("See you");
+                        break;
                     default:
                         Console.WriteLine("That option not exist");
                         break;
                     }
-            } while (option != 7);
+            } while (option != 9);
             
         }
     }
