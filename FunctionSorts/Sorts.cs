@@ -199,7 +199,7 @@ namespace FunctionSorts
             //Tempory pivot index
             i = lo - 1;
             
-            for (int j = lo; j < (hi - 1); j++)
+            for (int j = lo; j < (hi); j++)
             {
                 int Aux;
                 //If the current element is less than or equal to the pivot
@@ -212,9 +212,6 @@ namespace FunctionSorts
                     A.arrayInt[j] = Aux;
 
                 }
-                
-
-
             }
             //move the pivot element to the correct pivot position (between the smaller and larger elements
             i = i + 1;
@@ -225,6 +222,8 @@ namespace FunctionSorts
             return i;
 
         }
+
+
 
         public void printArray(Sorts Aux)
         {
