@@ -18,7 +18,7 @@ namespace FunctionSorts
         public Sorts(int lenghtA)
         {
             arrayInt = new int[lenghtA];
-            timeOfSorts = new Tuple<string, TimeSpan>[20];
+            timeOfSorts = new Tuple<string, TimeSpan>[18];
             max = lenghtA;
             counter = 0;
             counterTime = 0;
@@ -32,9 +32,18 @@ namespace FunctionSorts
                 this.arrayInt[this.counter++] = Aux.arrayInt[i];
 
         }
+        
         public bool IsEmpty()
         {
             return counter == 0;
+        }
+        public bool IsFull()
+        {
+            return counter == max;
+        }
+        public bool IsFullTime()
+        {
+            return counterTime == 18;
         }
         public void InsertNumbersA(int size)
         {
@@ -222,7 +231,123 @@ namespace FunctionSorts
             return i;
 
         }
+        
 
+        public void MergeSort(int[] arrayInt, int l, int r)
+        {
+            if(l < r)
+            {
+                // m is the point where the array is divided into two subarrays
+                int m = (l + r) / 2;
+
+                MergeSort(arrayInt, l, m);
+                MergeSort(arrayInt, m + 1, r);
+
+                // Merge the sorted subarrays
+                Merge(arrayInt, l, m, r);
+
+            }
+
+        }
+        public void Merge(int[] arrayInt, int p, int q, int r)
+        {
+            // Create L ← A[p..q] and M ← A[q+1..r]
+            int n1 = q - p + 1;
+            int n2 = r - q;
+
+            int[] L = new int[n1];
+            int[] M = new int[n2];
+
+            for (int inc = 0; inc < n1; inc++)
+                L[inc] = arrayInt[p + inc];
+            for (int jinc = 0; jinc < n2; jinc++)
+                M[jinc] = arrayInt[q + 1 + jinc];
+
+            // Maintain current index of sub-arrays and main array
+            int i, j, k;
+            i = 0;
+            j = 0;
+            k = p;
+
+            // Until we reach either end of either L or M, pick larger among
+            // elements L and M and place them in the correct position at A[p..r]
+            while (i < n1 && j < n2)
+            {
+                if (L[i] <= M[j])
+                {
+                    arrayInt[k] = L[i];
+                    i++;
+                }
+                else
+                {
+                    arrayInt[k] = M[j];
+                    j++;
+                }
+                k++;
+            }
+
+            // When we run out of elements in either L or M,
+            // pick up the remaining elements and put in A[p..r]
+            while (i < n1)
+            {
+                arrayInt[k] = L[i];
+                i++;
+                k++;
+            }
+
+            while (j < n2)
+            {
+                arrayInt[k] = M[j];
+                j++;
+                k++;
+            }
+        }
+
+        public void HeapSort(Sorts Aux)
+        {
+            int n = Aux.arrayInt.Length;
+
+            // Build max heap
+            for (int i = n / 2 - 1; i >= 0; i--)
+            {
+                HeapIfy(Aux.arrayInt, n, i);
+            }
+
+            // Heap sort
+            for (int i = n - 1; i >= 0; i--)
+            {
+                int temp = Aux.arrayInt[0];
+                Aux.arrayInt[0] = Aux.arrayInt[i];
+                Aux.arrayInt[i] = temp;
+
+                // Heapify root element
+                HeapIfy(Aux.arrayInt, i, 0);
+            }
+        }
+
+        void HeapIfy(int []arr, int n, int i)
+        {
+            // Find largest among root, left child and right child
+            int largest = i;
+            int l = 2 * i + 1;
+            int r = 2 * i + 2;
+
+            if (l < n && arr[l] > arr[largest])
+                largest = l;
+
+            if (r < n && arr[r] > arr[largest])
+                largest = r;
+
+            // Swap and continue heapifying if root is not largest
+            if (largest != i)
+            {
+                int swap = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = swap;
+
+                HeapIfy(arr, n, largest);
+            }
+        }
 
 
         public void printArray(Sorts Aux)
@@ -232,23 +357,29 @@ namespace FunctionSorts
         }
         public void AllSorts()
         {
-            Stopwatch Times = new Stopwatch();
             Sorts Distribucion1 = new Sorts(this);
             Sorts Distribucion2 = new Sorts(this);
             Sorts Distribucion3 = new Sorts(this);
             Sorts Distribucion4 = new Sorts(this);
             Sorts Distribucion5 = new Sorts(this);
+            Sorts Distribucion6 = new Sorts(this);
+            Stopwatch T1 = new Stopwatch();
+            Stopwatch T2 = new Stopwatch();
+            Stopwatch T3 = new Stopwatch();
+            Stopwatch T4 = new Stopwatch();
+            Stopwatch T5 = new Stopwatch();
+            Stopwatch T6 = new Stopwatch();
             Console.WriteLine("------------------------------------");
             Console.WriteLine("       Sort Burble");
             Console.WriteLine("------------------------------------");
 
             printArray(Distribucion1);
 
-            Times.Start();
+            T1.Start();
             SortBurble(Distribucion1);
-            Times.Stop();
+            T1.Stop();
 
-            timeOfSort("Burble", Times.Elapsed);
+            timeOfSort("Burble", T1.Elapsed);
             printArray(Distribucion1);
 
             Console.WriteLine("------------------------------------");
@@ -257,11 +388,11 @@ namespace FunctionSorts
 
             printArray(Distribucion2);
 
-            Times.Start();
+            T2.Start();
             SortInsercion(Distribucion2);
-            Times.Stop();
+            T2.Stop();
 
-            timeOfSort("Inserción", Times.Elapsed);
+            timeOfSort("Inserción", T2.Elapsed);
             printArray(Distribucion2);
 
             Console.WriteLine("------------------------------------");
@@ -270,12 +401,51 @@ namespace FunctionSorts
 
             printArray(Distribucion3);
 
-            Times.Start();
+            T3.Start();
             SortBurble(Distribucion3);
-            Times.Stop();
+            T3.Stop();
 
-            timeOfSort("Selección", Times.Elapsed);
+            timeOfSort("Selección", T3.Elapsed);
             printArray(Distribucion3);
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("       QuickSort");
+            Console.WriteLine("------------------------------------");
+
+            printArray(Distribucion4);
+
+            T4.Start();
+            QuickSort(Distribucion4, 0, Distribucion4.arrayInt.Length - 1);
+            T4.Stop();
+
+            timeOfSort("QuickSort", T4.Elapsed);
+            printArray(Distribucion4);
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("       MergeSort");
+            Console.WriteLine("------------------------------------");
+
+            printArray(Distribucion5);
+
+            T5.Start();
+            MergeSort(Distribucion5.arrayInt, 0, Distribucion5.arrayInt.Length - 1);
+            T5.Stop();
+
+            timeOfSort("MergeSort", T5.Elapsed);
+            printArray(Distribucion5);
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("       HeapSort");
+            Console.WriteLine("------------------------------------");
+
+            printArray(Distribucion6);
+
+            T6.Start();
+            HeapSort(Distribucion6);
+            T6.Stop();
+
+            timeOfSort("HeapSort", T6.Elapsed);
+            printArray(Distribucion6);
 
             Console.WriteLine();
             Console.WriteLine();
@@ -297,10 +467,12 @@ namespace FunctionSorts
                     Console.WriteLine("3. Sort Inserción");
                     Console.WriteLine("4. Sort Selección");
                     Console.WriteLine("5. QuickSort");
-                    Console.WriteLine("6. Show the array");
-                    Console.WriteLine("7. See time of Sort in each sort");
-                    Console.WriteLine("8. All Sorts");
-                    Console.WriteLine("9. Exit");
+                    Console.WriteLine("6. MergeSort");
+                    Console.WriteLine("7. HeapSort");
+                    Console.WriteLine("8. Show the array");
+                    Console.WriteLine("9. See time of Sort in each sort");
+                    Console.WriteLine("10. All Sorts");
+                    Console.WriteLine("11. Exit");
                     Console.WriteLine("-----------------------------------------");
                     Console.Write("Choose one of the options: ");
                 try
@@ -320,7 +492,10 @@ namespace FunctionSorts
                         try
                         {
                             n = int.Parse(Console.ReadLine());
-                            InsertNumbersA(n);
+                            if (!IsFull())
+                                InsertNumbersA(n);
+                            else
+                                throw new ArgumentException("It's full");
 
                         }
                         catch(Exception e)
@@ -401,29 +576,79 @@ namespace FunctionSorts
                         }
                         break;
                     case 6:
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                        {
+                            Sorts Distribucion5 = new Sorts(this);
+                            Stopwatch T5 = new Stopwatch();
+                            
+                            printArray(Distribucion5);
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            T5.Start();
+                            MergeSort(Distribucion5.arrayInt, 0, Distribucion5.arrayInt.Length - 1);
+                            T5.Stop();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            timeOfSort("MergeSort", T5.Elapsed);
+                            printArray(Distribucion5);
+                        }
+                        break;
+                    case 7:
+                        if (IsEmpty())
+                            Console.WriteLine("The array is empty");
+                        else
+                        {
+                            Sorts Distribucion6 = new Sorts(this);
+                            Stopwatch T6 = new Stopwatch();
+
+                            printArray(Distribucion6);
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            T6.Start();
+                            HeapSort(Distribucion6);
+                            T6.Stop();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            timeOfSort("HeapSort", T6.Elapsed);
+                            printArray(Distribucion6);
+                        }
+                        break;
+                    case 8:
                         Console.WriteLine("---------------------------------");
                         if (IsEmpty())
                             Console.WriteLine("The array is empty");
                         else
                             PrintArray();
                             break;
-                    case 7:
+                    case 9:
                         if (IsEmpty())
                             Console.WriteLine("The array is empty");
                         else
                             printTimeOfSorts();
                         break;
-                    case 8:
-                        AllSorts();
+                    case 10:
+                        if (!IsEmpty()) 
+                        { 
+                            if (!IsFullTime())
+                                AllSorts();
+                        }
+                        else
+                                Console.WriteLine("A lot of retries");
                         break;
-                    case 9:
+                    case 11:
                         Console.WriteLine("See you");
                         break;
                     default:
                         Console.WriteLine("That option not exist");
                         break;
                     }
-            } while (option != 9);
+            } while (option != 11);
             
         }
     }
