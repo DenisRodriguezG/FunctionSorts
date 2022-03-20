@@ -7,16 +7,18 @@ namespace FunctionSorts
     {
         static void Main(string[] args)
         {
+            //Tuple<string ,string, int>[] T1 = new Tuple<string, string, int>[100];
+           
             Sorts C1 = new Sorts(1000);
 
            
             C1.Menu();
-            
-            
+
+
 
             //C1.Menu();
-            
-            
+
+
             /*Tuple<string, int>[] T1 = new Tuple<string, int>[100];
             Tuple<string, int> Time1;
             Tuple<string, int> Time2;
@@ -28,16 +30,16 @@ namespace FunctionSorts
             for (int i = 0; i < T1.Length; i++)
                 Console.WriteLine(T1[i].Item2);*/
 
-          /*  Stopwatch T1 = new Stopwatch();
-            T1.Start();
-            for(int i = 0; i < 1000; i++)
-                Console.WriteLine(i);
+            /*  Stopwatch T1 = new Stopwatch();
+              T1.Start();
+              for(int i = 0; i < 1000; i++)
+                  Console.WriteLine(i);
 
-            T1.Stop();
-            
-            Console.WriteLine(T1.ElapsedMilliseconds);*/
+              T1.Stop();
 
-            
+              Console.WriteLine(T1.ElapsedMilliseconds);*/
+
+
         }
     }
 }

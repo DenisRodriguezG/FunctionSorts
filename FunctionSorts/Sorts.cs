@@ -11,7 +11,7 @@ namespace FunctionSorts
     {
         private int[] arrayInt;
         private int counter;
-        private Tuple <string, TimeSpan>[] timeOfSorts;
+        private Tuple <string ,string, TimeSpan>[] timeOfSorts;
         private int counterTime;
         private int max;
         private int burbuja = 0;
@@ -21,11 +21,12 @@ namespace FunctionSorts
         private int mergesort;
         private int heapsort;
         private int allSorts;
+        private int seleccionado = 0;
         
         public Sorts(int lenghtA)
         {
             arrayInt = new int[lenghtA];
-            timeOfSorts = new Tuple<string, TimeSpan>[18];
+            timeOfSorts = new Tuple<string ,string, TimeSpan>[18];
             max = lenghtA;
             counter = 0;
             counterTime = 0;
@@ -36,6 +37,7 @@ namespace FunctionSorts
             mergesort = 0;
             heapsort = 0;
             allSorts = 0;
+            seleccionado = 0;
         }
         public Sorts(Sorts Aux)
         {
@@ -59,17 +61,66 @@ namespace FunctionSorts
         {
             return counterTime == 18;
         }
-        public void InsertNumbersA(int size)
+        public void InsertNumbersA(int size, int opcion)
         {
-            
-            
-            for (int i = 0; i < size; i++)
+
+            if (opcion == 1)
             {
-                Random numbers = new Random();
-                int number = numbers.Next(0, size);
-                arrayInt[counter++] = number;
-                
+                for (int i = 0; i < size; i++)
+                {
+                    Random numbers = new Random();
+                    int number = numbers.Next(0, size);
+                    arrayInt[counter++] = number;
+
+                }
+                for (int i = 1; i < counter; i++)
+                {
+                    for (int j = 0; j < counter - 1; j++)
+                    {
+                        if (arrayInt[j] > arrayInt[j + 1])
+                        {
+                            int aux = arrayInt[j + 1];
+                            arrayInt[j + 1] = arrayInt[j];
+                            arrayInt[j] = aux;
+                        }
+                    }
+                }
             }
+            else if (opcion == 2)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    Random numbers = new Random();
+                    int number = numbers.Next(0, size);
+                    arrayInt[counter++] = number;
+
+                }
+                for (int i = 1; i < counter; i++)
+                {
+                    for (int j = 0; j < counter - 1; j++)
+                    {
+                        if (arrayInt[j] < arrayInt[j + 1])
+                        {
+                            int aux = arrayInt[j + 1];
+                            arrayInt[j + 1] = arrayInt[j];
+                            arrayInt[j] = aux;
+                        }
+                    }
+                }
+            }
+            else if (opcion == 3)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    Random numbers = new Random();
+                    int number = numbers.Next(0, size);
+                    arrayInt[counter++] = number;
+
+                }
+            }
+            else
+                Console.WriteLine("It´s not exist that option");
+            
 
         }
         public void PrintArray()
@@ -91,28 +142,110 @@ namespace FunctionSorts
                 Console.WriteLine(timeOfSorts[i].Item2);
             }
         }
-        public void timeOfSort(string name, TimeSpan time)
+        public void timeOfSort(string pasada,string name, TimeSpan time)
         {
-            Tuple<string, TimeSpan> addTime = new Tuple<string, TimeSpan>(name, time);
+            Tuple<string, string, TimeSpan> addTime = new Tuple<string,string, TimeSpan>(pasada,name, time);
             timeOfSorts[counterTime++] = addTime;
         }
-        public void printTimeOfSorts()
+        public void printTimeOfSorts(string todos = "none")
         {
             int menor = 0;
+            int mayor = 0;
+            int menor2 = 0;
+            int mayor2 = 0;
+            bool existe2 = false;
+            bool existe1 = false;
+            int pasada1 = 0;
+            if (todos == "todos")
+            {
+                mayor = seleccionado;
+                menor = seleccionado;
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("                List of sorts");
+                Console.WriteLine("-------------------------------------------------");
+                for (int i = 0; i < counterTime; i++)
+                    if(timeOfSorts[i].Item1 == "Pasada2")
+                         Console.WriteLine(timeOfSorts[i].Item1 +  ". name: " + timeOfSorts[i].Item2 + ". Time: " + timeOfSorts[i].Item3);
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine(seleccionado);
+                for (int i = seleccionado; i < counterTime - 1; i++)
+                {
+                    
+                    if (timeOfSorts[i].Item1 == "Pasada2")
+                    {
+                        if (timeOfSorts[i + 1].Item1 == "Pasada2")
+                        {
+                            if (timeOfSorts[menor].Item3 > timeOfSorts[i + 1].Item3)
+                                menor = i + 1;
+                            if ((timeOfSorts[mayor].Item3 < timeOfSorts[i + 1].Item3))
+                                mayor = i + 1;
+                        }
+                    }
+                   
+                }
+                Console.WriteLine("El menor tiempo es: ");
+                Console.WriteLine(timeOfSorts[menor].Item1 + " . Name: " + timeOfSorts[menor].Item2 + ". Time: " + timeOfSorts[menor].Item3);
+                Console.WriteLine("El mayor tiempo es: ");
+                Console.WriteLine(timeOfSorts[mayor].Item1 + " . Name: " + timeOfSorts[mayor].Item2 + ". Time: " + timeOfSorts[mayor].Item3);
+                return;
+            }
+            
+
+            
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("                List of sorts");
             Console.WriteLine("-------------------------------------------------");
             for (int i = 0; i < counterTime; i++)
-                Console.WriteLine("name: " + timeOfSorts[i].Item1 + ". Time: " + timeOfSorts[i].Item2);
+                Console.WriteLine(timeOfSorts[i].Item1 + " .name: " + timeOfSorts[i].Item2 + ". Time: " + timeOfSorts[i].Item3);
 
             Console.WriteLine("-------------------------------------------------");
             for (int i = 0; i < counterTime - 1; i++)
             {
-                if (timeOfSorts[menor].Item2 > timeOfSorts[i + 1].Item2)
-                    menor = i + 1;
+                if (timeOfSorts[i].Item1 == "Pasada1")
+                {
+                    existe1 = true;
+                    if (timeOfSorts[i + 1].Item1 == "Pasada1")
+                    {
+                        if (timeOfSorts[menor].Item3 > timeOfSorts[i + 1].Item3)
+                            menor = i + 1;
+                        if (timeOfSorts[mayor].Item3 < timeOfSorts[i + 1].Item3)
+                            mayor = i + 1;
+                    }
+                    pasada1++;
+                }
             }
-            Console.WriteLine("El menor tiempo es: ");
-            Console.WriteLine("name: " + timeOfSorts[menor].Item1 + ". Time: " + timeOfSorts[menor].Item2);
+            for (int i = 0; i < counterTime - 1; i++)
+            {
+                if (timeOfSorts[i].Item1 == "Pasada2" )
+                {
+                    existe2 = true;
+                    if (timeOfSorts[menor2].Item3 > timeOfSorts[i + 1].Item3)
+                        menor2 = i + 1;
+                    if (timeOfSorts[mayor2].Item3 < timeOfSorts[i + 1].Item3)
+                        mayor2 = i + 1;
+                }
+            }
+            if (existe1)
+            {   
+                    
+                
+                    Console.WriteLine("Pasada 1");
+                    Console.WriteLine("El menor tiempo es: ");
+                    Console.WriteLine(timeOfSorts[menor].Item1 + " .name: " + timeOfSorts[menor].Item2 + ". Time: " + timeOfSorts[menor].Item3);
+                    Console.WriteLine("El mayor tiempo es: ");
+                    Console.WriteLine(timeOfSorts[menor].Item1 + " .name: " + timeOfSorts[mayor].Item2 + ". Time: " + timeOfSorts[mayor].Item3);
+                    Console.WriteLine();
+                
+            }
+            if (existe2)
+            {
+                Console.WriteLine("Pasada 2");
+                Console.WriteLine("El menor tiempo es: ");
+                Console.WriteLine(timeOfSorts[menor2].Item1 + " .name: " + timeOfSorts[menor2].Item2 + ". Time: " + timeOfSorts[menor2].Item3);
+                Console.WriteLine("El mayor tiempo es: ");
+                Console.WriteLine(timeOfSorts[mayor2].Item1 + " .name: " + timeOfSorts[mayor2].Item2 + ". Time: " + timeOfSorts[mayor2].Item3);
+            }
+
         }
         public void SortBurble(Sorts Aux)
         {
@@ -383,6 +516,7 @@ namespace FunctionSorts
             Stopwatch T4 = new Stopwatch();
             Stopwatch T5 = new Stopwatch();
             Stopwatch T6 = new Stopwatch();
+            string all = "todos";
             Console.WriteLine("------------------------------------");
             Console.WriteLine("       Sort Burble");
             Console.WriteLine("------------------------------------");
@@ -393,7 +527,7 @@ namespace FunctionSorts
             SortBurble(Distribucion1);
             T1.Stop();
 
-            timeOfSort("Burble", T1.Elapsed);
+            timeOfSort("Pasada2","Burble", T1.Elapsed);
             printArray(Distribucion1);
 
             Console.WriteLine("------------------------------------");
@@ -406,7 +540,7 @@ namespace FunctionSorts
             SortInsercion(Distribucion2);
             T2.Stop();
 
-            timeOfSort("Inserción", T2.Elapsed);
+            timeOfSort("Pasada2", "Inserción", T2.Elapsed);
             printArray(Distribucion2);
 
             Console.WriteLine("------------------------------------");
@@ -419,7 +553,7 @@ namespace FunctionSorts
             SortBurble(Distribucion3);
             T3.Stop();
 
-            timeOfSort("Selección", T3.Elapsed);
+            timeOfSort("Pasada2", "Selección", T3.Elapsed);
             printArray(Distribucion3);
 
             Console.WriteLine("------------------------------------");
@@ -432,7 +566,7 @@ namespace FunctionSorts
             QuickSort(Distribucion4, 0, Distribucion4.arrayInt.Length - 1);
             T4.Stop();
 
-            timeOfSort("QuickSort", T4.Elapsed);
+            timeOfSort("Pasada2", "QuickSort", T4.Elapsed);
             printArray(Distribucion4);
 
             Console.WriteLine("------------------------------------");
@@ -445,7 +579,7 @@ namespace FunctionSorts
             MergeSort(Distribucion5.arrayInt, 0, Distribucion5.arrayInt.Length - 1);
             T5.Stop();
 
-            timeOfSort("MergeSort", T5.Elapsed);
+            timeOfSort("Pasada2","MergeSort", T5.Elapsed);
             printArray(Distribucion5);
 
             Console.WriteLine("------------------------------------");
@@ -458,12 +592,14 @@ namespace FunctionSorts
             HeapSort(Distribucion6);
             T6.Stop();
 
-            timeOfSort("HeapSort", T6.Elapsed);
+            timeOfSort("Pasada2", "HeapSort", T6.Elapsed);
             printArray(Distribucion6);
 
             Console.WriteLine();
             Console.WriteLine();
-            printTimeOfSorts();
+
+            printTimeOfSorts(all);
+            
 
         }
         public void Menu()
@@ -505,14 +641,23 @@ namespace FunctionSorts
                     {
                         case 1:
                             int n;
+                            int op;
                             Console.Write("How many numbers do you want?: ");
                             try
                             {
                                 n = int.Parse(Console.ReadLine());
-                                if (!IsFull())
-                                    InsertNumbersA(n);
-                                else
-                                    throw new ArgumentException("It's full");
+                            if (!IsFull())
+                            {
+                                Console.WriteLine("Choose one of option");
+                                Console.WriteLine("1. Ascendente");
+                                Console.WriteLine("2. Descendente");
+                                Console.WriteLine("3. Aleatorio");
+                                Console.Write("Enter...: ");
+                                op = int.Parse(Console.ReadLine());
+                                InsertNumbersA(n, op);
+                            }
+                            else
+                                throw new ArgumentException("It's full");
 
                             }
                             catch (Exception e)
@@ -536,9 +681,10 @@ namespace FunctionSorts
                                     SortBurble(Distribucion1);
                                     T1.Stop();
 
-                                    timeOfSort("Burble", T1.Elapsed);
+                                    timeOfSort("Pasada1","Burble", T1.Elapsed);
                                     printArray(Distribucion1);
                                     burbuja++;
+                                    seleccionado++;
                                 }
                                 else
                                 {
@@ -563,9 +709,10 @@ namespace FunctionSorts
                                 SortInsercion(Distribucion2);
                                 T2.Stop();
 
-                                timeOfSort("Inserción", T2.Elapsed);
+                                timeOfSort("Pasada1", "Inserción", T2.Elapsed);
                                 printArray(Distribucion2);
                                 insercion++;
+                                seleccionado++;
                             }
                             else
                                 Console.WriteLine("You've already click");
@@ -588,9 +735,10 @@ namespace FunctionSorts
                                 SortSeleccion(Distribucion3);
                                 T3.Stop();
 
-                                timeOfSort("Selección", T3.Elapsed);
+                                timeOfSort("Pasada1", "Selección", T3.Elapsed);
                                 printArray(Distribucion3);
                                 seleccion++;
+                                seleccionado++;
                             }
                             else
                                 Console.WriteLine("You've already click");
@@ -612,9 +760,10 @@ namespace FunctionSorts
                                 QuickSort(Distribucion4, 0, Distribucion4.arrayInt.Length - 1);
                                 T4.Stop();
                                 Console.WriteLine();
-                                timeOfSort("QuickSort", T4.Elapsed);
+                                timeOfSort("Pasada1", "QuickSort", T4.Elapsed);
                                 printArray(Distribucion4);
                                 quicksort++;
+                                seleccionado++;
                             }
                             else Console.WriteLine("You've already click");
                                
@@ -640,9 +789,10 @@ namespace FunctionSorts
                                 Console.WriteLine();
                                 Console.WriteLine();
                                 Console.WriteLine();
-                                timeOfSort("MergeSort", T5.Elapsed);
+                                timeOfSort("Pasada1", "MergeSort", T5.Elapsed);
                                 printArray(Distribucion5);
                                 mergesort++;
+                                seleccionado++;
                             }
                             else
                                 Console.WriteLine("You've already click");
@@ -669,9 +819,10 @@ namespace FunctionSorts
                                 Console.WriteLine();
                                 Console.WriteLine();
                                 Console.WriteLine();
-                                timeOfSort("HeapSort", T6.Elapsed);
+                                timeOfSort("Pasada1", "HeapSort", T6.Elapsed);
                                 printArray(Distribucion6);
                                 heapsort++;
+                                seleccionado++;
                             }
                             else
                                 Console.WriteLine("You've already click");
@@ -694,8 +845,15 @@ namespace FunctionSorts
                         case 10:
                             if (!IsEmpty())
                             {
-                                if (!IsFullTime())
+                            if (!IsFullTime())
+                                if (allSorts == 0)
+                                {
                                     AllSorts();
+                                    allSorts++;
+                                }
+                                    
+                                else
+                                    Console.WriteLine("You've already click");
                             }
                             else
                                 Console.WriteLine("A lot of retries");
