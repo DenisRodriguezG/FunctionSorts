@@ -14,6 +14,13 @@ namespace FunctionSorts
         private Tuple <string, TimeSpan>[] timeOfSorts;
         private int counterTime;
         private int max;
+        private int burbuja = 0;
+        private int insercion;
+        private int seleccion;
+        private int quicksort;
+        private int mergesort;
+        private int heapsort;
+        private int allSorts;
         
         public Sorts(int lenghtA)
         {
@@ -22,6 +29,13 @@ namespace FunctionSorts
             max = lenghtA;
             counter = 0;
             counterTime = 0;
+            burbuja = 0;
+            insercion = 0;
+            seleccion = 0;
+            quicksort = 0;
+            mergesort = 0;
+            heapsort = 0;
+            allSorts = 0;
         }
         public Sorts(Sorts Aux)
         {
@@ -454,11 +468,13 @@ namespace FunctionSorts
         }
         public void Menu()
         {
+
                 int option = 0;
+
                 do
                 {
 
-                Console.WriteLine();
+                    Console.WriteLine();
                     Console.WriteLine("-----------------------------------------");
                     Console.WriteLine("                  Sorts");
                     Console.WriteLine("-----------------------------------------");
@@ -475,180 +491,224 @@ namespace FunctionSorts
                     Console.WriteLine("11. Exit");
                     Console.WriteLine("-----------------------------------------");
                     Console.Write("Choose one of the options: ");
-                try
-                {
-                    option = int.Parse(Console.ReadLine());
-                }catch(Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                
-                
+                    try
+                    {
+                        option = int.Parse(Console.ReadLine());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+
                     switch (option)
                     {
-                     case 1:
-                        int n;
-                        Console.Write("How many numbers do you want?: ");
-                        try
-                        {
-                            n = int.Parse(Console.ReadLine());
-                            if (!IsFull())
-                                InsertNumbersA(n);
-                            else
-                                throw new ArgumentException("It's full");
+                        case 1:
+                            int n;
+                            Console.Write("How many numbers do you want?: ");
+                            try
+                            {
+                                n = int.Parse(Console.ReadLine());
+                                if (!IsFull())
+                                    InsertNumbersA(n);
+                                else
+                                    throw new ArgumentException("It's full");
 
-                        }
-                        catch(Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
-                        break;
-                    case 2:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                        {
-                            Sorts Distribucion1 = new Sorts(this);
-                            Stopwatch T1 = new Stopwatch();
-
-                            printArray(Distribucion1);
-
-                            T1.Start();
-                            SortBurble(Distribucion1);
-                            T1.Stop();
-
-                            timeOfSort("Burble", T1.Elapsed);
-                            printArray(Distribucion1);
-                        }
-                        break;
-                    case 3:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                        {
-                            Sorts Distribucion2 = new Sorts(this);
-                            Stopwatch T2 = new Stopwatch();
-
-                            printArray(Distribucion2);
-
-                            T2.Start();
-                            SortInsercion(Distribucion2);
-                            T2.Stop();
-
-                            timeOfSort("Inserción", T2.Elapsed);
-                            printArray(Distribucion2);
-                        } 
-                        break;
-                    case 4:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                        {
-                            Sorts Distribucion3 = new Sorts(this);
-                            Stopwatch T3 = new Stopwatch();
-
-                            printArray(Distribucion3);
-
-                            T3.Start();
-                            SortSeleccion(Distribucion3);
-                            T3.Stop();
-
-                            timeOfSort("Selección", T3.Elapsed);
-                            printArray(Distribucion3);
-                        }
-                        break;
-                    case 5:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                        {
-                            Sorts Distribucion4 = new Sorts(this);
-                            Stopwatch T4 = new Stopwatch();
-
-                            printArray(Distribucion4);
-
-                            T4.Start();
-                            QuickSort(Distribucion4, 0, Distribucion4.arrayInt.Length-1);
-                            T4.Stop();
-                            Console.WriteLine();
-                            timeOfSort("QuickSort", T4.Elapsed);
-                            printArray(Distribucion4);
-                        }
-                        break;
-                    case 6:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                        {
-                            Sorts Distribucion5 = new Sorts(this);
-                            Stopwatch T5 = new Stopwatch();
-                            
-                            printArray(Distribucion5);
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            T5.Start();
-                            MergeSort(Distribucion5.arrayInt, 0, Distribucion5.arrayInt.Length - 1);
-                            T5.Stop();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            timeOfSort("MergeSort", T5.Elapsed);
-                            printArray(Distribucion5);
-                        }
-                        break;
-                    case 7:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                        {
-                            Sorts Distribucion6 = new Sorts(this);
-                            Stopwatch T6 = new Stopwatch();
-
-                            printArray(Distribucion6);
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            T6.Start();
-                            HeapSort(Distribucion6);
-                            T6.Stop();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            timeOfSort("HeapSort", T6.Elapsed);
-                            printArray(Distribucion6);
-                        }
-                        break;
-                    case 8:
-                        Console.WriteLine("---------------------------------");
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                            PrintArray();
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
                             break;
-                    case 9:
-                        if (IsEmpty())
-                            Console.WriteLine("The array is empty");
-                        else
-                            printTimeOfSorts();
-                        break;
-                    case 10:
-                        if (!IsEmpty()) 
-                        { 
-                            if (!IsFullTime())
-                                AllSorts();
-                        }
-                        else
+                        case 2:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty. You neee to enter the numbers");
+                            else
+                            {
+                                if (burbuja == 0)
+                                {
+                                    Sorts Distribucion1 = new Sorts(this);
+                                    Stopwatch T1 = new Stopwatch();
+
+                                    printArray(Distribucion1);
+
+                                    T1.Start();
+                                    SortBurble(Distribucion1);
+                                    T1.Stop();
+
+                                    timeOfSort("Burble", T1.Elapsed);
+                                    printArray(Distribucion1);
+                                    burbuja++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You've already click");
+                                }
+
+                            }
+                            break;
+                        case 3:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                            { 
+                            if(insercion == 0)
+                            {
+                                Sorts Distribucion2 = new Sorts(this);
+                                Stopwatch T2 = new Stopwatch();
+
+                                printArray(Distribucion2);
+
+                                T2.Start();
+                                SortInsercion(Distribucion2);
+                                T2.Stop();
+
+                                timeOfSort("Inserción", T2.Elapsed);
+                                printArray(Distribucion2);
+                                insercion++;
+                            }
+                            else
+                                Console.WriteLine("You've already click");
+                            
+                            }
+                            break;
+                        case 4:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                            {
+                            if (seleccion == 0)
+                            {
+                                Sorts Distribucion3 = new Sorts(this);
+                                Stopwatch T3 = new Stopwatch();
+
+                                printArray(Distribucion3);
+
+                                T3.Start();
+                                SortSeleccion(Distribucion3);
+                                T3.Stop();
+
+                                timeOfSort("Selección", T3.Elapsed);
+                                printArray(Distribucion3);
+                                seleccion++;
+                            }
+                            else
+                                Console.WriteLine("You've already click");
+                            }
+                            break;
+                        case 5:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                            {
+                            if(quicksort == 0)
+                            {
+                                Sorts Distribucion4 = new Sorts(this);
+                                Stopwatch T4 = new Stopwatch();
+
+                                printArray(Distribucion4);
+
+                                T4.Start();
+                                QuickSort(Distribucion4, 0, Distribucion4.arrayInt.Length - 1);
+                                T4.Stop();
+                                Console.WriteLine();
+                                timeOfSort("QuickSort", T4.Elapsed);
+                                printArray(Distribucion4);
+                                quicksort++;
+                            }
+                            else Console.WriteLine("You've already click");
+                               
+                            }
+                            break;
+                        case 6:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                            {
+                            if(mergesort == 0)
+                            {
+                                Sorts Distribucion5 = new Sorts(this);
+                                Stopwatch T5 = new Stopwatch();
+
+                                printArray(Distribucion5);
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                T5.Start();
+                                MergeSort(Distribucion5.arrayInt, 0, Distribucion5.arrayInt.Length - 1);
+                                T5.Stop();
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                timeOfSort("MergeSort", T5.Elapsed);
+                                printArray(Distribucion5);
+                                mergesort++;
+                            }
+                            else
+                                Console.WriteLine("You've already click");
+                           
+                            }
+                            break;
+                        case 7:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                            {
+                            if(heapsort == 0)
+                            {
+                                Sorts Distribucion6 = new Sorts(this);
+                                Stopwatch T6 = new Stopwatch();
+
+                                printArray(Distribucion6);
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                T6.Start();
+                                HeapSort(Distribucion6);
+                                T6.Stop();
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                timeOfSort("HeapSort", T6.Elapsed);
+                                printArray(Distribucion6);
+                                heapsort++;
+                            }
+                            else
+                                Console.WriteLine("You've already click");
+                            
+                            }
+                            break;
+                        case 8:
+                            Console.WriteLine("---------------------------------");
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                                PrintArray();
+                            break;
+                        case 9:
+                            if (IsEmpty())
+                                Console.WriteLine("The array is empty");
+                            else
+                                printTimeOfSorts();
+                            break;
+                        case 10:
+                            if (!IsEmpty())
+                            {
+                                if (!IsFullTime())
+                                    AllSorts();
+                            }
+                            else
                                 Console.WriteLine("A lot of retries");
-                        break;
-                    case 11:
-                        Console.WriteLine("See you");
-                        break;
-                    default:
-                        Console.WriteLine("That option not exist");
-                        break;
+                            break;
+                        case 11:
+                            Console.WriteLine("See you");
+                            break;
+                        default:
+                            Console.WriteLine("That option not exist");
+                            break;
                     }
-            } while (option != 11);
+                } while (option != 11);
+                
             
         }
     }
